@@ -20,8 +20,8 @@ func (self *WhitePaper) StoreOrUpdate() *WhitePaper {
 		transport.TransportEntity{
 			ID:         0,
 			Type:       entityName,
-			Context:    self.InstanceId,
-			Value:      "",
+			Context:    "",
+			Value:      self.InstanceId,
 			Properties: map[string]string{"Hash": self.Hash, "ClientID": self.ClientID, "Content": self.Content},
 		})
 	return self
