@@ -9,7 +9,6 @@ import (
 	"github.com/voodooEntity/whitepaper-server/src/whitepaper"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -86,7 +85,7 @@ func GetWhitePaper(w http.ResponseWriter, r *http.Request) {
 	requiredUrlParams := map[string]string{"hash": ""}
 	urlParams, err := getRequiredUrlParams(requiredUrlParams, r)
 
-	qry := query.New().Read("Whitepaper").Match("Value", "==", strconv.Itoa(instanceId)).Match("Properties.Hash", "==", urlParams["hash"])
+	qry := query.New().Read("Whitepaper").Match("Value", "==", instanceId).Match("Properties.Hash", "==", urlParams["hash"])
 	res := query.Execute(qry)
 	if 1 == res.Amount {
 		respond("", 200, w)
