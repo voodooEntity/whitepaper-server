@@ -84,6 +84,10 @@ func GetWhitePaper(w http.ResponseWriter, r *http.Request) {
 	// first we get the params
 	requiredUrlParams := map[string]string{"hash": ""}
 	urlParams, err := getRequiredUrlParams(requiredUrlParams, r)
+	if nil != err {
+		respond(err.Error(), 500, w)
+		return
+	}
 
 	qry := query.New().Read("Whitepaper").Match("Value", "==", instanceId).Match("Properties.Hash", "==", urlParams["hash"])
 	res := query.Execute(qry)
@@ -93,6 +97,7 @@ func GetWhitePaper(w http.ResponseWriter, r *http.Request) {
 	}
 	qry = query.New().Read("Whitepaper").Match("Value", "==", instanceId)
 	res = query.Execute(qry)
+	archivist.DebugF("Loaded whiptepaper entity %+v", res)
 	whitePaper := whitepaper.Load(instanceId)
 	if nil == whitePaper {
 		respond("unknown instance id given", 500, w)
