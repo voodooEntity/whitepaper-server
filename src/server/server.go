@@ -92,7 +92,7 @@ func GetWhitePaper(w http.ResponseWriter, r *http.Request) {
 		respond("", 200, w)
 		return
 	}
-	qry = query.New().Read("Whitepaper").Match("Value", "==", strconv.Itoa(instanceId))
+	qry = query.New().Read("Whitepaper").Match("Value", "==", instanceId)
 	res = query.Execute(qry)
 	whitePaper := whitepaper.Load(instanceId)
 	if nil == whitePaper {
@@ -114,18 +114,14 @@ func getOptionalUrlParams(optionalUrlParams map[string]string, urlParams map[str
 	return urlParams
 }
 
-func getIdFromUrl(w http.ResponseWriter, r *http.Request) (int, error) {
+func getIdFromUrl(w http.ResponseWriter, r *http.Request) (string, error) {
 	// Extract the ID from the URL path
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) == 0 {
-		return -1, errors.New("Url param missing")
+		return "", errors.New("Url param missing")
 	}
 
-	idStr := parts[len(parts)-1]
-	instanceId, err := strconv.Atoi(idStr)
-	if err != nil {
-		return -1, errors.New("Invalid url param")
-	}
+	instanceId := parts[len(parts)-1]
 
 	return instanceId, nil
 }

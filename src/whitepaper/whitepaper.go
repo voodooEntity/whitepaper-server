@@ -4,7 +4,6 @@ import (
 	"github.com/voodooEntity/gits"
 	"github.com/voodooEntity/gits/src/query"
 	"github.com/voodooEntity/gits/src/transport"
-	"strconv"
 )
 
 var entityName = "Whitepaper"
@@ -28,8 +27,8 @@ func (self *WhitePaper) StoreOrUpdate() *WhitePaper {
 	return self
 }
 
-func Load(instanceId int) *WhitePaper {
-	qry := query.New().Read(entityName).Match("Value", "==", strconv.Itoa(instanceId))
+func Load(instanceId string) *WhitePaper {
+	qry := query.New().Read(entityName).Match("Value", "==", instanceId)
 	res := query.Execute(qry)
 	if res.Amount == 0 {
 		return nil
