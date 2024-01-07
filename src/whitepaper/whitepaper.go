@@ -13,7 +13,7 @@ type WhitePaper struct {
 	Hash       string
 	Content    string
 	ClientID   string
-	InstanceId int
+	InstanceId string
 }
 
 func (self *WhitePaper) StoreOrUpdate() *WhitePaper {
@@ -21,7 +21,7 @@ func (self *WhitePaper) StoreOrUpdate() *WhitePaper {
 		transport.TransportEntity{
 			ID:         0,
 			Type:       entityName,
-			Context:    strconv.Itoa(self.InstanceId),
+			Context:    self.InstanceId,
 			Value:      "",
 			Properties: map[string]string{"Hash": self.Hash, "ClientID": self.ClientID, "Content": self.Content},
 		})
@@ -35,13 +35,8 @@ func Load(instanceId int) *WhitePaper {
 		return nil
 	}
 	return &WhitePaper{
-		InstanceId: res.Entities[0].ID,
-		Content:    res.Entities[0].Value,
-		Hash:       strconv.Itoa(res.Entities[0].Version),
+		InstanceId: res.Entities[0].Value,
+		Content:    res.Entities[0].Properties["Content"],
+		Hash:       res.Entities[0].Properties["Hash"],
 	}
-}
-
-func (self *WhitePaper) Update() *WhitePaper {
-	query.New().Update(entityName).Match("ID", "==", strconv.Itoa(self.InstanceId)).Set("Value", self.Content)
-	return self
 }
