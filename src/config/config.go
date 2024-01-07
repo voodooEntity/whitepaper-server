@@ -8,7 +8,7 @@ import (
 )
 
 var Data = make(map[string]string)
-var requiredConfigs = [13]string{"HOST", "PORT", "PERSISTENCE", "LOG_TARGET", "LOG_PATH", "LOG_LEVEL", "CORS_HEADER", "CORS_ORIGIN", "TOKEN_LIFETIME", "AUTH_ACTIVE", "PROTOCOL"}
+var requiredConfigs = [11]string{"HOST", "PORT", "PERSISTENCE", "LOG_TARGET", "LOG_PATH", "LOG_LEVEL", "CORS_HEADER", "CORS_ORIGIN", "TOKEN_LIFETIME", "AUTH_ACTIVE", "PROTOCOL"}
 
 func Init(params map[string]string) {
 	// given config it gets used as a sub-library and won't have
