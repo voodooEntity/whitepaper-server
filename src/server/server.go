@@ -25,6 +25,7 @@ func Start() {
 
 	// Route: /v1/mapJson
 	ServeMux.HandleFunc("/api/Whitepaper/", func(w http.ResponseWriter, r *http.Request) {
+		archivist.DebugF("Incoming request: %+v", r.Method)
 		if "" != config.GetValue("CORS_ORIGIN") || "" != config.GetValue("CORS_HEADER") {
 			if "OPTIONS" == r.Method {
 				respond("", 200, w)
@@ -66,6 +67,8 @@ func CreateOrUpdateWhitePaper(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid json query object "+err.Error(), 422)
 		return
 	}
+
+	archivist.DebugF("Unpacked payload: %+v", whitepaperData)
 
 	// create whitepaper and respond
 	whitepaperData.StoreOrUpdate()
