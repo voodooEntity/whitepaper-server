@@ -11,7 +11,7 @@ var entityName = "Whitepaper"
 type WhitePaper struct {
 	Hash       string
 	Content    string
-	ClientID   string
+	ClientId   string
 	InstanceId string
 }
 
@@ -25,10 +25,10 @@ func (self *WhitePaper) StoreOrUpdate() *WhitePaper {
 				Type:       entityName,
 				Context:    "",
 				Value:      self.InstanceId,
-				Properties: map[string]string{"Hash": self.Hash, "ClientID": self.ClientID, "Content": self.Content},
+				Properties: map[string]string{"Hash": self.Hash, "ClientID": self.ClientId, "Content": self.Content},
 			})
 	} else {
-		qry = query.New().Update("Whitepaper").Match("Value", "==", self.InstanceId).Set("Properties.Content", self.Content).Set("Properties.Hash", self.Hash).Set("Properties.ClientID", self.ClientID)
+		qry = query.New().Update("Whitepaper").Match("Value", "==", self.InstanceId).Set("Properties.Content", self.Content).Set("Properties.Hash", self.Hash).Set("Properties.ClientID", self.ClientId)
 		query.Execute(qry)
 	}
 
@@ -45,5 +45,6 @@ func Load(instanceId string) *WhitePaper {
 		InstanceId: res.Entities[0].Value,
 		Content:    res.Entities[0].Properties["Content"],
 		Hash:       res.Entities[0].Properties["Hash"],
+		ClientId:   res.Entities[0].Properties["ClientID"],
 	}
 }
