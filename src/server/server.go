@@ -20,6 +20,7 @@ func Start() {
 	ServeMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// The "/" matches anything not handled elsewhere. If it's not the root
 		// then report not found.
+		archivist.Debug(r.Method)
 		archivist.Debug(r.URL.Path)
 		archivist.DebugF("%+v", r.URL.Query())
 		archivist.Debug(r.URL.Path)
