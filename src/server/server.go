@@ -17,31 +17,42 @@ var ServeMux = http.NewServeMux()
 func Start() {
 	archivist.Info("> Booting HTTP API")
 
-	// Route: /v1/ping
-	ServeMux.HandleFunc("/v1/ping", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// The "/" matches anything not handled elsewhere. If it's not the root
+		// then report not found.
+		archivist.Debug(r.URL.Path)
+		archivist.DebugF("%+v", r.URL.Query())
+		archivist.Debug(r.URL.Path)
+		archivist.Debug(r.URL.Scheme)
+		archivist.Debug(r.URL.RequestURI())
 		respond("pong", 200, w)
 	})
 
+	// Route: /v1/ping
+	//ServeMux.HandleFunc("/v1/ping", func(w http.ResponseWriter, r *http.Request) {
+	//	respond("pong", 200, w)
+	//})
+
 	// Route: /v1/mapJson
-	ServeMux.HandleFunc("/api/Whitepaper/", func(w http.ResponseWriter, r *http.Request) {
-		archivist.DebugF("Incoming request: %+v", r.Method)
-		if "" != config.GetValue("CORS_ORIGIN") || "" != config.GetValue("CORS_HEADER") {
-			if "OPTIONS" == r.Method {
-				respond("", 200, w)
-				return
-			}
-		}
+	//ServeMux.HandleFunc("/api/Whitepaper/", func(w http.ResponseWriter, r *http.Request) {
+	//	archivist.DebugF("Incoming request: %+v", r.Method)
+	//	if "" != config.GetValue("CORS_ORIGIN") || "" != config.GetValue("CORS_HEADER") {
+	//		if "OPTIONS" == r.Method {
+	//			respond("", 200, w)
+	//			return
+	//		}
+	//	}
 
-		switch r.Method {
-		case http.MethodPost:
-			CreateOrUpdateWhitePaper(w, r)
-		case http.MethodGet:
-			GetWhitePaper(w, r)
-		default:
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		}
+	//	switch r.Method {
+	//	case http.MethodPost:
+	//		CreateOrUpdateWhitePaper(w, r)
+	//	case http.MethodGet:
+	//		GetWhitePaper(w, r)
+	//	default:
+	//		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	//	}
 
-	})
+	//})
 
 	// building server listen string by
 	// config values and print it - than listen
