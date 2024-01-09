@@ -17,7 +17,7 @@ var ServeMux = http.NewServeMux()
 func Start() {
 	archivist.Info("> Booting HTTP API")
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	ServeMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// The "/" matches anything not handled elsewhere. If it's not the root
 		// then report not found.
 		archivist.Debug(r.URL.Path)
