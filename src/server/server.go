@@ -17,50 +17,37 @@ var ServeMux = http.NewServeMux()
 func Start() {
 	archivist.Info("> Booting HTTP API")
 
-	ServeMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// The "/" matches anything not handled elsewhere. If it's not the root
-		// then report not found.
-		archivist.Debug(r.Method)
-		archivist.Debug(r.URL.Path)
-		archivist.DebugF("%+v", r.URL.Query())
-		archivist.Debug(r.URL.Path)
-		archivist.Debug(r.URL.Scheme)
-		archivist.Debug(r.URL.RequestURI())
+	// Route: /v1/ping
+	ServeMux.HandleFunc("/v1/ping", func(w http.ResponseWriter, r *http.Request) {
 		respond("pong", 200, w)
 	})
 
-	// Route: /v1/ping
-	//ServeMux.HandleFunc("/v1/ping", func(w http.ResponseWriter, r *http.Request) {
-	//	respond("pong", 200, w)
-	//})
-
 	// Route: /v1/mapJson
-	//ServeMux.HandleFunc("/api/Whitepaper/", func(w http.ResponseWriter, r *http.Request) {
-	//	archivist.DebugF("Incoming request: %+v", r.Method)
-	//	if "" != config.GetValue("CORS_ORIGIN") || "" != config.GetValue("CORS_HEADER") {
-	//		if "OPTIONS" == r.Method {
-	//			respond("", 200, w)
-	//			return
-	//		}
-	//	}
+	ServeMux.HandleFunc("/api/WhitePaper/", func(w http.ResponseWriter, r *http.Request) {
+		archivist.DebugF("Incoming request: %+v", r.Method)
+		if "" != config.GetValue("CORS_ORIGIN") || "" != config.GetValue("CORS_HEADER") {
+			if "OPTIONS" == r.Method {
+				respond("", 200, w)
+				return
+			}
+		}
 
-	//	switch r.Method {
-	//	case http.MethodPost:
-	//		CreateOrUpdateWhitePaper(w, r)
-	//	case http.MethodGet:
-	//		GetWhitePaper(w, r)
-	//	default:
-	//		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-	//	}
+		switch r.Method {
+		case http.MethodPost:
+			CreateOrUpdateWhitePaper(w, r)
+		case http.MethodGet:
+			GetWhitePaper(w, r)
+		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
 
-	//})
+	})
 
 	// building server listen string by
 	// config values and print it - than listen
 	connectString := buildListenConfigString()
 	archivist.Info("> Server listening settings by config (" + connectString + ")")
-	//http.ListenAndServe(connectString, ServeMux)
-	http.ListenAndServeTLS(connectString, config.GetValue("SSL_CERT_FILE"), config.GetValue("SSL_KEY_FILE"), ServeMux)
+	http.ListenAndServe(connectString, ServeMux)
 }
 
 func CreateOrUpdateWhitePaper(w http.ResponseWriter, r *http.Request) {
