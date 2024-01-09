@@ -47,7 +47,8 @@ func Start() {
 	// config values and print it - than listen
 	connectString := buildListenConfigString()
 	archivist.Info("> Server listening settings by config (" + connectString + ")")
-	http.ListenAndServe(connectString, ServeMux)
+	//http.ListenAndServe(connectString, ServeMux)
+	http.ListenAndServeTLS(connectString, config.GetValue("SSL_CERT_FILE"), config.GetValue("SSL_KEY_FILE"), ServeMux)
 }
 
 func CreateOrUpdateWhitePaper(w http.ResponseWriter, r *http.Request) {
